@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const querySql = require('../db/index')
+const querySql = require('../db/index');
 
 // 添加部门
 /**
