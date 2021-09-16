@@ -1,0 +1,30 @@
+component: http
+name: http-express-PnvX9LkjQ
+inputs:
+  src:
+    src: ./
+    exclude:
+      - .env
+  faas:
+    framework: express
+    name: '${name}'
+    runtime: Nodejs12.16
+    eip: false
+    timeout: 3
+    memorySize: 512
+    layers:
+      - name: '${output:${stage}:${app}:su-sm-layer.name}'
+        version: '${output:${stage}:${app}:su-sm-layer.version}'
+  apigw:
+    protocols:
+      - http
+      - https
+    timeout: 60
+    environment: release
+    customDomains: []
+  region: ap-guangzhou
+  isAutoCiDeploy: false
+  static: {}
+org: '1259409954'
+app: su-sm
+stage: dev
