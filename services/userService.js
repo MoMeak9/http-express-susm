@@ -1,7 +1,6 @@
 const querySql = require('../db/index');
 const {PWD_SALT, PRIVATE_KEY, EXPIRES} = require('../config/constant');
 const {md5} = require('../uitls');
-const {v4: uuidv4} = require('uuid');
 const jwt = require('jsonwebtoken');
 
 async function login(req, res, next) {
@@ -15,6 +14,7 @@ async function login(req, res, next) {
             let result = await querySql('select * from users where studentID = ? and password = ?', [studentID, password]);
             if (!result || result.length === 0) {
                 res.send({code: -1, msg: "密码不正确"});
+            } else {
                 let token = jwt.sign({
                     uuid: result[0].uuid,
                     op: result[0].op
@@ -22,7 +22,8 @@ async function login(req, res, next) {
                 res.send({code: 1, msg: "登入成功", token: `Bearer ${token}`});
             }
         }
-    } catch (err) {
+    } catch
+        (err) {
         res.status(404).send({code: -1, msg: "系统异常"});
         console.log(err);
         next(err);

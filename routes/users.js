@@ -4,7 +4,6 @@ const querySql = require('../db/index');
 const {PWD_SALT, PRIVATE_KEY, EXPIRES, serverAddress} = require('../config/constant');
 const {md5, upload} = require('../uitls');
 const {v4: uuidv4} = require('uuid');
-const jwt = require('jsonwebtoken');
 const service = require('../services/userService');
 
 // 更改为主要负责路由以及路由文档
