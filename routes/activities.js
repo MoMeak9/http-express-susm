@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const querySql = require('../db/index')
-const fs = require('fs');
-
+const service = require('../services/activitiesServive');
 // 新增活动
 /**
  * @swagger
@@ -62,33 +60,7 @@ const fs = require('fs');
  *       '500':
  *         description: 系统异常
  */
-router.post('/addActivity', async (req, res, next) => {
-    let {
-        name,
-        intro,
-        startTime,
-        finishTime,
-        createUser,
-        updateUser,
-        score,
-        activityType,
-        department,
-        scoreType
-    } = req.body
-    let {op} = req.user
-    if (op !== 1) {
-        res.send({code: -1, msg: "无权限"})
-    } else {
-        try {
-            await querySql('insert into activityLog(name,intro,startTime,finishTime,createUser,updateUser,score,activityType,department,scoreType,createTime,updateTime) value(?,?,?,?,?,?,?,?,?,?,NOW(),NOW())',
-                [name, intro, startTime, finishTime, createUser, updateUser, score, activityType, department, scoreType])
-            res.send({code: 1, msg: "成功"})
-        } catch (err) {
-            console.log(err)
-            next(err)
-        }
-    }
-});
+router.post('/addActivity', service.addActivity);
 
 // 添加活动、违规记录  批量生成记录
 /**
@@ -123,31 +95,8 @@ router.post('/addActivity', async (req, res, next) => {
  *       '500':
  *         description: 系统异常
  */
-router.post('/addLog', async (req, res, next) => {
-    let {activityID, participantUUIDList, createUser, studentID, realName} = req.body
-    let {op} = req.user
-    let errorList = []
-    if (op !== 1) {
-        res.send({code: -1, msg: "无权限"})
-    } else {
-        for (let i = 0; i < participantUUIDList.length; i++) {
-            try {
-                let log = await querySql('select * from activityLog where activityID = ? and participantUUID=?',
-                    [activityID, participantUUIDList[i]])
-                if (!log || log.length === 0) {
-                    await querySql('insert into activityLog(activityID,participantUUID,createTime,createUser,studentID,realName) value(?,?,NOW(),?,?,?)',
-                        [activityID, participantUUIDList[i], createUser, studentID, realName])
-                } else {
-                    errorList.push(participantUUIDList[i])
-                }
-            } catch (err) {
-                console.log(err)
-                next(err)
-            }
-        }
-        res.send({code: 1, msg: `录入完成，已存在相同数据${errorList.toString()}`})
-    }
-});
+router.post('/addLog', service.addLog);
+
 // 编辑、删除记录
 /**
  * @swagger
@@ -181,7 +130,7 @@ router.post('/addLog', async (req, res, next) => {
  *       '500':
  *         description: 系统异常
  */
-
+router.post('/editLog', service.editLog);
 
 // 导出记录
 /**
@@ -216,7 +165,7 @@ router.post('/addLog', async (req, res, next) => {
  *       '500':
  *         description: 系统异常
  */
-
+router.get('/exportLog', service.exportLog);
 
 // 查询个人记录
 /**
@@ -251,17 +200,7 @@ router.post('/addLog', async (req, res, next) => {
  *       '500':
  *         description: 系统异常
  */
-router.post('/queryPersonalLog', async (req, res, next) => {
-    let {queryPage, querySize} = req.body
-    let {uuid} = req.user
-    try {
-        let userinfo = await querySql('', [uuid])
-        res.send({code: 1, msg: "成功", data: userinfo})
-    } catch (err) {
-        console.log(err)
-        next(err)
-    }
-});
+router.post('/queryPersonalLog', service.queryPersonalLog);
 
 // 查询所有记录
 /**
@@ -296,23 +235,6 @@ router.post('/queryPersonalLog', async (req, res, next) => {
  *       '500':
  *         description: 系统异常
  */
-router.post('/queryAllLog', async (req, res, next) => {
-    let {queryPage, querySize} = req.body
-    const params = [(parseInt(queryPage) - 1) * parseInt(querySize), parseInt(querySize)]
-    const sql = "select * from websites limit ?,?"
-    let sqlTotal = 'select count(*) AS total from activityLog'
-    let {op} = req.user
-    if (op !== 1) {
-        res.send({code: -1, msg: "无权限"})
-    } else {
-        try {
-            let userinfo = await querySql('', [uuid])
-            res.send({code: 1, msg: "成功", data: userinfo})
-        } catch (err) {
-            console.log(err)
-            next(err)
-        }
-    }
-});
+router.post('/queryAllLog', service.queryAllLog);
 
 module.exports = router;
