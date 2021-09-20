@@ -90,12 +90,15 @@ async function exportLog(req, res, next) {
     console.log(pareams);
 }
 
-
+async function editLog(req, res, next) {
+    console.log(req)
+}
 
 module.exports = {
     addActivity,
     addLog,
     queryPersonalLog,
     queryAllLog,
-    exportLog
+    exportLog,
+    editLog
 };

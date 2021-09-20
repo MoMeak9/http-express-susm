@@ -130,7 +130,7 @@ router.post('/addLog', service.addLog);
  *       '500':
  *         description: 系统异常
  */
-
+router.post('/editLog', service.editLog);
 
 // 导出记录
 /**
@@ -165,7 +165,7 @@ router.post('/addLog', service.addLog);
  *       '500':
  *         description: 系统异常
  */
-router.get('/exportLog',service.exportLog);
+router.get('/exportLog', service.exportLog);
 
 // 查询个人记录
 /**
