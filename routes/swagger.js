@@ -1,7 +1,7 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 const express = require("express");
 const router = express.Router();
-const swaggerUi = require('swagger-ui-express')
+const swaggerUi = require('swagger-ui-express');
 
 // Configuring
 const swaggerOptions = {
@@ -37,4 +37,4 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-module.exports = router
+module.exports = router;

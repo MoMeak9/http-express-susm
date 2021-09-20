@@ -11,4 +11,4 @@ module.exports = {
         '/api/users/register',
         /^\/api\/api-docs\/.*/,
         /^\/\/uploads\/\/.*/]
-}
+};

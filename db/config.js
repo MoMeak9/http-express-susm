@@ -7,6 +7,6 @@ let dbOption = {
     user: 'root',
     password: 'Qweasdzxc0904@',
     database: 'SUSM'
-}
+};
 
-module.exports = dbOption
+module.exports = dbOption;

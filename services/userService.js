@@ -25,7 +25,7 @@ async function login(req, res, next) {
         }
     } catch
         (err) {
-        res.status(404).send({code: -1, msg: "系统异常"});
+        res.status(500).send({code: -1, msg: "系统异常"});
         console.log(err);
         next(err);
     }
@@ -45,7 +45,7 @@ async function register(req, res, next) {
             res.send({code: -1, msg: "该账户已存在"});
         }
     } catch (err) {
-        res.status(404).send({code: -1, msg: "系统异常"});
+        res.status(500).send({code: -1, msg: "系统异常"});
         console.log(err);
         next(err);
     }
